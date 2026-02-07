@@ -1,0 +1,51 @@
+services:
+  php:
+    container_name: tempfastmail_php
+    build:
+      context: .
+      target: frankenphp_dev
+    restart: unless-stopped
+    volumes:
+      - ./frankenphp/Caddyfile:/etc/frankenphp/Caddyfile:ro
+      - ./frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro
+      - ./:/app
+    ports:
+      - "80:80"
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    tty: true
+    environment:
+      FRANKENPHP_WORKER_CONFIG: watch
+      XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tempfastmail_phpmyadmin
+    restart: unless-stopped
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      UPLOAD_LIMIT: 300M
+    ports:
+      - "81:80"
+
+  mysql:
+    container_name: tempfastmail_mysql
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_DATABASE: project
+      MYSQL_USER: project
+      MYSQL_PASSWORD: project
+    ports:
+      - "3306:3306"
+    volumes:
+      - volume_database_tempfastmail:/var/lib/mysql
+
+volumes:
+  volume_database_tempfastmail:

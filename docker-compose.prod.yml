@@ -1,0 +1,14 @@
+services:
+  tempfastmail:
+    container_name: tempfastmail
+    image: kasteckis/tempfastmail:latest
+    restart: unless-stopped
+    environment:
+      # TODO: Thay đổi giá trị này thành một chuỗi ngẫu nhiên (giống như mật khẩu)
+      CREATE_RECEIVED_EMAIL_API_AUTHORIZATION_KEY: change-this-to-a-random-value
+      # TODO: Thay đổi thành tên miền của bạn (ví dụ: https://mail.example.com)
+      DEFAULT_URI: https://yourdomain.com
+    ports:
+      - "80:80"
+    volumes:
+      - ./sqlite:/app/sqlite

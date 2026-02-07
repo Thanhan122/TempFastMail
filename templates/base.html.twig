@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Temp Fast Mail{% endblock %}</title>
+        <link rel="icon" href="/favicon.png" type="image/x-icon" />
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+
+        {% if app.request.server.get('PLAUSIBLE_ANALYTICS_URL') %}
+            <script defer data-domain="{{ app.request.server.get('DEFAULT_URI')|domain }}" src="{{ app.request.server.get('PLAUSIBLE_ANALYTICS_URL') }}"></script>
+        {% endif %}
+    </head>
+    <body>
+    {% include 'navbar.html.twig' %}
+    {% block body %}{% endblock %}
+    {% include 'footer.html.twig' %}
+    {% include 'cookie_popup.html.twig' %}
+    </body>
+</html>

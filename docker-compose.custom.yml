@@ -1,0 +1,20 @@
+services:
+  tempfastmail:
+    container_name: tempfastmail
+    build:
+      context: .
+      target: frankenphp_prod
+    restart: unless-stopped
+    environment:
+      # Thay đổi các giá trị này cho khớp với production của bạn
+      APP_SECRET: "change-this-to-a-random-value"
+      CREATE_RECEIVED_EMAIL_API_AUTHORIZATION_KEY: "thanhan122"
+      DEFAULT_URI: "http://aczxmm.food"
+      # Sử dụng SQLite
+      DATABASE_URL: "sqlite:///%kernel.project_dir%/sqlite/data.db"
+    ports:
+      - "80:80"
+    volumes:
+      - ./sqlite:/app/sqlite
+      # Uncomment dòng dưới nếu muốn sửa code trực tiếp mà không cần rebuild (Dev mode)
+      # - ./:/app

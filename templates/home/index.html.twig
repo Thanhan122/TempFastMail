@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Temp Fast Mail - Disposable Temporary Email{% endblock %}
+
+{% block body %}
+    <div {{ react_component('Application') }}>
+        <div class="is-flex is-justify-content-center is-align-items-center is-fullheight">
+            <div class="has-text-centered">
+                <p>Loading...</p>
+                <i class="fas fa-cog fa-spin fa-3x"></i>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    {% include 'home/recent_blogs.html.twig' %}
+
+    {% if app.request.server.get('DISPLAY_FAQ_ON_HOMEPAGE')|lower == 'true' %}
+        <hr>
+        {% include 'components/faq.html.twig' %}
+    {% endif %}
+{% endblock %}

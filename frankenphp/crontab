@@ -1,0 +1,2 @@
+* * * * * touch /app/.idea/file_from_crontab
+0 * * * * /usr/local/bin/php /app/bin/console app:delete-old-emails
