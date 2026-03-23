@@ -6,7 +6,7 @@ Tài liệu này hướng dẫn quy trình chuẩn để triển khai hệ thố
 1.  **VPS:** Ubuntu 20.04/22.04 (1 Core, 1GB RAM).
 2.  **Cloudflare:** Mọi tên miền muốn dùng làm mail đều phải được thêm vào Cloudflare.
 3.  **DNS (Quan trọng):** Với mỗi domain (ví dụ `domain1.com`, `domain2.com`), bạn phải tạo một bản ghi **A** trỏ về IP của VPS.
-
+scp -r ./* root@103.118.29.214:/root/tempmail/
 ---
 
 ## Phần 2: Cài đặt Server (Triển khai từ Source Code)
