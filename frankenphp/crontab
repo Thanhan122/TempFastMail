@@ -1,0 +1,1 @@
+* * * * * cd /app && /usr/local/bin/php bin/console app:delete-old-emails >> /var/log/cron_stdout.log 2>&1

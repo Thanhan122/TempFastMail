@@ -1,0 +1,45 @@
+services:
+  tempfastmail:
+    container_name: tempfastmail
+    image: kasteckis/tempfastmail:latest
+    restart: unless-stopped
+    environment:
+      CREATE_RECEIVED_EMAIL_API_AUTHORIZATION_KEY: change-this-to-a-random-value
+      DEFAULT_URI: https://yourdomain.com
+      DATABASE_URL: "postgresql://mailtemp:mailtemp_pass@db:5432/mailtemp_db?serverVersion=16&charset=utf8"
+      REDIS_URL: "redis://redis:6379"
+    ports:
+      - "80:80"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  db:
+    image: postgres:16-alpine
+    container_name: mailtemp_prod_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mailtemp_db
+      POSTGRES_USER: mailtemp
+      POSTGRES_PASSWORD: mailtemp_pass
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mailtemp -d mailtemp_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: ["postgres", "-c", "shared_buffers=16GB", "-c", "max_connections=2000"]
+
+  redis:
+    image: redis:7-alpine
+    container_name: mailtemp_prod_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  db_data:
+  redis_data:

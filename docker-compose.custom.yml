@@ -1,0 +1,73 @@
+services:
+  tempfastmail:
+    container_name: tempfastmail
+    build:
+      context: .
+      target: frankenphp_prod
+    restart: unless-stopped
+    environment:
+      APP_SECRET: "change-this-to-a-random-value"
+      CREATE_RECEIVED_EMAIL_API_AUTHORIZATION_KEY: "leoteoteomailtemp"
+      DEFAULT_URI: "http://caughtin4k.online"
+      DATABASE_URL: "postgresql://mailtemp:mailtemp_pass@db:5432/mailtemp_db?serverVersion=16&charset=utf8"
+      REDIS_URL: "redis://redis:6379"
+    ports:
+      - "9999:80"      
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  db:
+    image: postgres:16-alpine
+    container_name: mailtemp_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mailtemp_db
+      POSTGRES_USER: mailtemp
+      POSTGRES_PASSWORD: mailtemp_pass
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mailtemp -d mailtemp_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Optimize PostgreSQL for 64GB RAM (Allocating 16GB for shared_buffers)
+    command: ["postgres", "-c", "shared_buffers=16GB", "-c", "max_connections=2000"]
+
+  redis:
+    image: redis:7-alpine
+    container_name: mailtemp_redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: mailtemp_tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    depends_on:
+      - tempfastmail
+
+  smtp_receiver:
+    container_name: mailtemp_smtp
+    build:
+      context: ./smtp_server
+    restart: unless-stopped
+    environment:
+      SMTP_PORT: "25"
+      API_URL: "http://tempfastmail:80/api/email"
+      AUTH_KEY: "leoteoteomailtemp"
+    ports:
+      - "25:25"
+    depends_on:
+      - tempfastmail
+
+volumes:
+  db_data:
+  redis_data:

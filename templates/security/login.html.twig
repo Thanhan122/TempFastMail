@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log In - Temp Fast Mail{% endblock %}
+
+{% block body %}
+    <div class="section">
+        <div class="container" style="max-width: 420px;">
+            <form method="post" class="box">
+
+                {% if error %}
+                    <div class="notification is-danger">
+                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                    </div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="notification is-info is-light">
+                        You are logged in as <strong>{{ app.user.userIdentifier }}</strong>,
+                        <a href="{{ logout_path() }}">Logout</a>
+                    </div>
+                {% endif %}
+
+                <h1 class="title is-4 has-text-centered">Please sign in</h1>
+
+                <div class="field">
+                    <label class="label" for="username">Email</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="email"
+                            value="{{ last_username }}"
+                            name="_username"
+                            id="username"
+                            autocomplete="email"
+                            required
+                            autofocus
+                        >
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="password">Password</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            type="password"
+                            name="_password"
+                            id="password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <input
+                    type="hidden"
+                    name="_csrf_token"
+                    value="{{ csrf_token('authenticate') }}"
+                >
+
+                <div class="field">
+                    <label class="checkbox">
+                        <input type="checkbox" name="_remember_me" id="_remember_me">
+                        Remember me
+                    </label>
+                </div>
+
+                <div class="field">
+                    <button class="button is-primary is-fullwidth is-medium" type="submit">
+                        Sign in
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{
+    "name": "smtp-receiver",
+    "version": "1.0.0",
+    "description": "Local SMTP server to replace Cloudflare Worker for inbound email",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "postal-mime": "^2.4.1",
+        "smtp-server": "^3.13.6"
+    }
+}

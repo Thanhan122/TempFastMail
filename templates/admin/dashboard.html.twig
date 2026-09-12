@@ -1,0 +1,64 @@
+{% extends "@EasyAdmin/page/content.html.twig" %}
+
+{% block page_content %}
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">Dashboard Statistics</h1>
+
+            {% if activeDomainsCount == 0 %}
+                <div class="alert alert-danger" role="alert">
+                    ⚠️ No active domains found! Please add a domain in "Domains" section on the left menu.
+                </div>
+            {% endif %}
+
+
+            <table class="table is-striped is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Count</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Active domains</td>
+                    <td>{{ activeDomainsCount }}</td>
+                </tr>
+                <tr>
+                    <td>Temporary Email Box Count</td>
+                    <td>{{ temporaryEmailBoxCount }}</td>
+                </tr>
+                <tr>
+                    <td>Received Total Emails (with assigned email box)</td>
+                    <td>{{ receivedEmailsWithEmailBoxCount }}</td>
+                </tr>
+                <tr>
+                    <td>Received Total Emails (without assigned email box)</td>
+                    <td>{{ receivedEmailsWithoutEmailBoxCount }}</td>
+                </tr>
+                <tr>
+                    <td>Read emails</td>
+                    <td>{{ readEmails }}</td>
+                </tr>
+                <tr>
+                    <td>Unread emails</td>
+                    <td>{{ unreadEmails }}</td>
+                </tr>
+                <tr>
+                    <td>Oldest received email at</td>
+                    <td>{{ oldestReceivedEmailAt.createdAt|date('Y-m-d H:i:s') }}</td>
+                </tr>
+                <tr>
+                    <td>Newest received email at</td>
+                    <td>{{ newestReceivedEmailAt.createdAt|date('Y-m-d H:i:s') }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock page_content %}

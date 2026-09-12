@@ -1,0 +1,63 @@
+<div id="cookie-popup" class="cookie-popup box">
+    <h4 class="title is-5 mb-2">We value your privacy</h4>
+
+    <p class="mb-3">
+        Our website uses cookies to provide you with a safer and more personalized experience.
+        By accepting, you agree to the use of cookies for ad personalization and analytics.
+        This may involve sharing data with third-party partners. Learn more in our
+        <a href="/privacy-policy" target="_blank">Privacy Policy</a>.
+    </p>
+
+    <button class="button is-primary is-fullwidth mb-2" onclick="acceptCookies()">
+        Accept
+    </button>
+    <button class="button is-light is-fullwidth" onclick="rejectCookies()">
+        Reject All
+    </button>
+</div>
+<style>
+    .cookie-popup {
+        position: fixed;
+        bottom: 1rem;
+        left: 1rem;
+        right: 1rem;
+        max-width: 360px;
+        z-index: 9999;
+        display: none;
+    }
+
+    /* Desktop */
+    @media (min-width: 769px) {
+        .cookie-popup {
+            right: auto;
+            bottom: 1.5rem;
+            left: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+    const COOKIE_KEY = 'cookie_consent';
+
+    function acceptCookies() {
+        localStorage.setItem(COOKIE_KEY, 'accepted');
+        hidePopup();
+    }
+
+    function rejectCookies() {
+        localStorage.setItem(COOKIE_KEY, 'rejected');
+        hidePopup();
+    }
+
+    function hidePopup() {
+        document.getElementById('cookie-popup').style.display = 'none';
+    }
+
+    function showPopupIfNeeded() {
+        if (!localStorage.getItem(COOKIE_KEY)) {
+            document.getElementById('cookie-popup').style.display = 'block';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', showPopupIfNeeded);
+</script>
